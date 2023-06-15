@@ -6,27 +6,55 @@
 
 
 function loadEvents(emptyContainers, image) {
+
+    dragStart(image);
+    dragEnd(image);
+
     emptyContainers.forEach(div => {
-        div.addEventListener("dragover", (e) => {
-            e.preventDefault();
-            console.log('over');
-            div.classList.add("over");
-        });
-        div.addEventListener("dragleave", (e) => {
-            console.log('leave');
-            div.classList.remove("over");
-        });
-        div.addEventListener("drop", (e) => {
-            e.preventDefault();
-            console.log('drop');
-        });
-        div.addEventListener("dragstart", () => {
-            console.log('dragstart');
-            image.classList.add("hold");
-        });
-        div.addEventListener("dragend", () => {
-            console.log('dragend');
-            image.classList.remove("hold");
-        });
+        dragOver(div);
+        dragEnter(div);
+        dragLeave(div);
+        dragDrop(div, image);
+    });
+}
+
+function dragStart(image) {
+    image.addEventListener("dragstart", (e) => {
+        image.classList.add("hold");
+        setTimeout(() => {
+            image.style = 'visibility: hidden';
+        }, 0);
+    });
+}
+
+function dragEnd(image) {
+    image.addEventListener("dragend", (e) => {
+        image.classList.remove("hold");
+        image.style = '';
+    });
+}
+
+function dragOver(div) {
+    div.addEventListener("dragover", (e) => {
+        e.preventDefault(); //Allows dragDrop to kick in
+        div.classList.add("over");
+    });
+}
+
+function dragLeave(div) {
+    div.addEventListener("dragleave", (e) => {
+        div.classList.remove("over");
+    });
+}
+
+function dragEnter(div) {
+    div.addEventListener("dragenter", (e) => {
+        e.preventDefault();
+    });
+}
+
+function dragDrop(div, image) {
+    div.addEventListener("drop", (e) => {
+        div.appendChild(image);
     });
 }
